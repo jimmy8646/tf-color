@@ -1,6 +1,7 @@
 let data
 let colors = []
-let xs,ys
+let xs, ys
+let model
 let labels = []
 let labelList = [
   'red-ish',
@@ -29,11 +30,26 @@ function setup() {
   xs = tf.tensor2d(colors)
   // console.log(xs.shape) //[row,col]
 
-  let labelsTensor = tf.tensor1d(labels,'int32') 
+  let labelsTensor = tf.tensor1d(labels, 'int32')
   // labelsTensor.print()
 
-  ys = tf.oneHot(labelsTensor,9)
-  
+  ys = tf.oneHot(labelsTensor, 9)
+
+  model = tf.sequential()
+
+  let hiddenLayer = tf.layers.dense({
+    units: 32,
+    inputDim: 3, // R,G,B 三種 input
+    activation: 'sigmoid',
+  })
+  let outputLayer = tf.layers.dense({
+    units: 9, // 9 種 label
+    activation: 'softmax',
+  })
+
+  model.add(hiddenLayer)
+  model.add(outputLayer)
+
 }
 
 function draw() {
