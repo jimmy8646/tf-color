@@ -50,6 +50,21 @@ function setup() {
   model.add(hiddenLayer)
   model.add(outputLayer)
 
+  const learnRate = 0.2
+  const optimizer = tf.train.sgd(learnRate)
+
+  model.compile({
+    optimizer: optimizer,
+    loss: 'categoricalCrossentropy'
+  })
+
+  const options = {
+    epochs: 10,
+  }
+
+  model.fit(xs, ys, options).then((res) => {
+    console.log(res.history.loss)
+  })
 }
 
 function draw() {
