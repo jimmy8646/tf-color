@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,10 +10,45 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.0"> </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js"> </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.dom.min.js"> </script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
 </head>
+
 <body>
-  <div id="canvas"></div>
+  <div class="container my-4">
+    <div class="row">
+      <div class="col">
+        <div class="d-flex justify-content-center mb-3">
+          <div id="canvas"></div>
+        </div>
+        <div class="wrap d-flex justify-content-center h3">
+          <label for="">我覺得他是:</label>
+          <div id="result"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="slider-wrap d-flex flex-column flex-lg-row justify-content-center justify-content-lg-between  align-items-center">
+          <div class="wrap d-flex align-items-center">
+            <label for="sliderR" class="label mr-2 mb-0">R:</label>
+            <div id="sliderR"></div>
+          </div>
+          <div class="wrap d-flex align-items-center">
+            <label for="sliderG" class="label mr-2 mb-0">G:</label>
+            <div id="sliderG"></div>
+          </div>
+          <div class="wrap d-flex align-items-center">
+            <label for="sliderB" class="label mr-2 mb-0">B:</label>
+            <div id="sliderB"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 <script src="main.js"></script>
+
 </html>

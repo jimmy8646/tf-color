@@ -5,15 +5,15 @@ let model
 let labels = []
 let rSlider, gSlider, bSlider
 let labelList = [
-  'red-ish',
-  'green-ish',
-  'blue-ish',
-  'orange-ish',
-  'yellow-ish',
-  'pink-ish',
-  'purple-ish',
-  'brown-ish',
-  'grey-ish',
+  '紅色系',
+  '綠色系',
+  '藍色系',
+  '橘色系',
+  '黃色系',
+  '粉色系',
+  '紫色系',
+  '棕色系',
+  '灰色系',
 ]
 
 
@@ -22,9 +22,10 @@ function preload() {
 }
 
 function setup() {
-  rSlider = createSlider(0, 255, 255);
-  gSlider = createSlider(0, 255, 0);
-  bSlider = createSlider(0, 255, 255);
+  let canvas = createCanvas(300, 300).parent('canvas')
+  rSlider = createSlider(0, 255, 255).parent('sliderR')
+  gSlider = createSlider(0, 255, 0).parent('sliderG')
+  bSlider = createSlider(0, 255, 255).parent('sliderB')
   for (let record of data.entries) {
     let col = [record.r / 255, record.g / 255, record.b / 255] //Normalization
     colors.push(col)
@@ -73,14 +74,14 @@ async function train() {
     validationSplit: 0.1, // 10%
     shuffle: true,
     callbacks: {
-      onTrainBegin: () => console.log('onTrainBegin'),
-      onTrainEnd: () => console.log('onTrainEnd'),
-      onEpochBegin: () => console.log('onEpochBegin'),
+      // onTrainBegin: () => console.log('onTrainBegin'),
+      // onTrainEnd: () => console.log('onTrainEnd'),
+      // onEpochBegin: () => console.log('onEpochBegin'),
       onEpochEnd: (num, logs) => {
         console.log(`epochs: ${num} 結束， Loss值: ${logs.val_loss}`)
         // console.log(logs)
       },
-      onBatchBegin: () => console.log('onBatchBegin'),
+      // onBatchBegin: () => console.log('onBatchBegin'),
       onBatchEnd: () => {
         // console.log('onBatchEnd')
         return tf.nextFrame()
@@ -100,14 +101,22 @@ function draw() {
   stroke(255);
   line(frameCount % width, 0, frameCount % width, height);
 
-  const xs = tf.tensor2d([
-    [r / 255, g / 255, b / 255]
-  ])
+  // 防止記憶體被吃光
+  tf.tidy(() => {
+    const xs = tf.tensor2d([
+      [r / 255, g / 255, b / 255]
+    ])
 
-  let result = model.predict(xs)
-  let index = result.argMax(1).dataSync() //拿取機率最高的index
+    let result = model.predict(xs)
+    let index = result.argMax(1).dataSync() //拿取機率最高的 index
+    let label = labelList[index]
 
-  let label = labelList[index]
-  console.log(label)
-  // result.print()
+    document.getElementById("result").innerHTML= label 
+    // console.log(label)
+    // console.log(tf.memory().numTensors)
+    // result.print()
+
+  })
+  
+
 }
