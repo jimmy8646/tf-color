@@ -25,7 +25,7 @@ function setup() {
   let canvas = createCanvas(300, 300).parent('canvas')
   rSlider = createSlider(0, 255, 255).parent('sliderR')
   gSlider = createSlider(0, 255, 0).parent('sliderG')
-  bSlider = createSlider(0, 255, 255).parent('sliderB')
+  bSlider = createSlider(0, 255, 0).parent('sliderB')
   for (let record of data.entries) {
     let col = [record.r / 255, record.g / 255, record.b / 255] //Normalization
     colors.push(col)
@@ -37,14 +37,14 @@ function setup() {
   let labelsTensor = tf.tensor1d(labels, 'int32')
   // labelsTensor.print()
 
-  ys = tf.oneHot(labelsTensor, 9)
+  ys = tf.oneHot(labelsTensor, 9) // one hot encoding
 
   model = tf.sequential()
 
   let hiddenLayer = tf.layers.dense({
-    units: 32,
+    units: 32, // 此隱藏層的神經元數量
     inputDim: 3, // R,G,B 三種 input
-    activation: 'sigmoid',
+    activation: 'sigmoid', // 激活函數
   })
   let outputLayer = tf.layers.dense({
     units: 9, // 9 種 label
@@ -55,11 +55,11 @@ function setup() {
   model.add(outputLayer)
 
   const learnRate = 0.2
-  const optimizer = tf.train.sgd(learnRate)
+  const optimizer = tf.train.sgd(learnRate) // 梯度下降法
 
   model.compile({
     optimizer: optimizer,
-    loss: 'categoricalCrossentropy'
+    loss: 'categoricalCrossentropy' // 優化 loss 演算法 for 分類問題
   })
 
   train().then((res) => {
@@ -70,15 +70,16 @@ function setup() {
 async function train() {
 
   const options = {
-    epochs: 10,
-    validationSplit: 0.1, // 10%
-    shuffle: true,
+    epochs: 30, // 輪迴訓練次數
+    validationSplit: 0.1, // 10% 資料驗證
+    shuffle: true, // 亂數取樣
     callbacks: {
       // onTrainBegin: () => console.log('onTrainBegin'),
       // onTrainEnd: () => console.log('onTrainEnd'),
       // onEpochBegin: () => console.log('onEpochBegin'),
       onEpochEnd: (num, logs) => {
-        console.log(`epochs: ${num} 結束， Loss值: ${logs.val_loss}`)
+        document.getElementById("status").innerHTML = `epochs: ${num} 結束， Loss值: ${logs.loss}`
+        // console.log(`epochs: ${num} 結束， Loss值: ${logs.loss}`)
         // console.log(logs)
       },
       // onBatchBegin: () => console.log('onBatchBegin'),
